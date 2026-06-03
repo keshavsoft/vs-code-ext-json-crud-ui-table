@@ -4,7 +4,7 @@
   "description": "Generate Ui for different tables",
   "publisher": "KeshavSoft",
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -22,12 +22,21 @@
       {
         "command": "extension.explorer.context.folder.ui.table.init.showAll",
         "title": "Init ShowAll"
+      },
+      {
+        "command": "extension.explorer.context.folder.ui.table.init.showAllWithSerial",
+        "title": "Init ShowAllWithSerial"
       }
     ],
     "menus": {
       "explorer/context": [
         {
           "command": "extension.explorer.context.folder.ui.table.init.showAll",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation@2"
+        },
+        {
+          "command": "extension.explorer.context.folder.ui.table.init.showAllWithSerial",
           "when": "explorerResourceIsFolder",
           "group": "navigation@2"
         }
@@ -50,6 +59,6 @@
     "@vscode/test-electron": "^2.5.2"
   },
   "dependencies": {
-    "json-crud-ui-table": "^1.4.3"
+    "json-crud-ui-table": "^1.4.4"
   }
 }
