@@ -9,3 +9,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Initial release
 
 v3 perfect with simple
+
+1.2.2
+
+config path added
