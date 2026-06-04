@@ -30,6 +30,10 @@
       {
         "command": "extension.explorer.context.folder.ui.table.init.withHeader",
         "title": "Init WithHeader"
+      },
+      {
+        "command": "extension.showHtml",
+        "title": "showHtml"
       }
     ],
     "menus": {
@@ -46,6 +50,11 @@
         },
         {
           "command": "extension.explorer.context.folder.ui.table.init.withHeader",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation@2"
+        },
+        {
+          "command": "extension.showHtml",
           "when": "explorerResourceIsFolder",
           "group": "navigation@2"
         }
