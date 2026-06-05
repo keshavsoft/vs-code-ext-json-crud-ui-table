@@ -20,12 +20,39 @@
   "contributes": {
     "commands": [
       {
+        "command": "extension.explorer.context.folder.ui.table.init.showAll",
+        "title": "Init ShowAll"
+      },
+      {
+        "command": "extension.explorer.context.folder.ui.table.init.showAllWithSerial",
+        "title": "Init ShowAllWithSerial"
+      },
+      {
+        "command": "extension.explorer.context.folder.ui.table.init.withHeader",
+        "title": "Init WithHeader"
+      },
+      {
         "command": "extension.showHtml",
         "title": "showHtml"
       }
     ],
     "menus": {
       "explorer/context": [
+        {
+          "command": "extension.explorer.context.folder.ui.table.init.showAll",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation@2"
+        },
+        {
+          "command": "extension.explorer.context.folder.ui.table.init.showAllWithSerial",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation@2"
+        },
+        {
+          "command": "extension.explorer.context.folder.ui.table.init.withHeader",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation@2"
+        },
         {
           "command": "extension.showHtml",
           "when": "explorerResourceIsFolder",
