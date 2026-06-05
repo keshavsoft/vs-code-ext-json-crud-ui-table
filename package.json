@@ -4,7 +4,7 @@
   "description": "Generate Ui for different tables",
   "publisher": "KeshavSoft",
   "type": "module",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "engines": {
     "vscode": "^1.116.0"
   },
