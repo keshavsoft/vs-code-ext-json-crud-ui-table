@@ -4,7 +4,7 @@
   "description": "Generate Ui for different tables",
   "publisher": "KeshavSoft",
   "type": "module",
-  "version": "1.3.2",
+  "version": "1.3.4",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -50,6 +50,7 @@
     "@vscode/test-electron": "^2.5.2"
   },
   "dependencies": {
-    "json-crud-ui-table": "^1.11.3"
+    "json-crud-ui-table": "^1.12.4",
+    "json-crud-ui-comp": "^1.1.3"
   }
 }

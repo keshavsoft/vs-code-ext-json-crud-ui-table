@@ -4,6 +4,8 @@ import path from 'path';
 
 import { withHeader, headerOnly } from "json-crud-ui-table";
 
+import { tableComp } from "json-crud-ui-comp";
+
 const activateHtml = (context, uri) => {
     const panel = vscode.window.createWebviewPanel(
         "showHtml",
@@ -22,7 +24,33 @@ const activateHtml = (context, uri) => {
 
         switch (message.action) {
             case "showAll":
-                await showAllCommand(context);
+
+                panel.webview.postMessage({
+                    type: "status",
+                    text: "⏳ Generating CRUD..."
+                });
+
+                await tableComp({
+                    showLog: true,
+                    isAnnounce: true,
+                    toPath: uri.fsPath,
+                    tableName: message.tableName,
+                    configPath: path.join(userRootFolder, "Config", "Schemas")
+                });
+
+                panel.webview.postMessage({
+                    type: "complete",
+                    html: `
+        <div class="font-semibold mb-2">
+            ✅ Generation Complete
+        </div>
+
+        <div><b>Action:</b> With Header</div>
+        <div><b>Table:</b> ${message.tableName}</div>
+        <div><b>Output:</b> ${uri.fsPath}</div>
+    `
+                });
+
                 break;
 
             case "withHeader":

@@ -54,7 +54,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button onclick="sendWithHeader()" class="group bg-[#252526]
+                <button onclick="showAll()" class="group bg-[#252526]
                     border border-gray-700
                     rounded-xl p-5 text-left
                     hover:border-blue-500
@@ -63,7 +63,7 @@
                     <div class="text-2xl mb-2">📄</div>
 
                     <div class="font-medium">
-                        With Header
+                        Show All
                     </div>
 
                     <div class="text-sm text-gray-400">
@@ -154,9 +154,9 @@
             vscode.postMessage({ action });
         }
 
-        function sendWithHeader() {
+        function showAll() {
             vscode.postMessage({
-                action: "withHeader",
+                action: "showAll",
                 tableName: document.getElementById("tableName").value
             });
         };

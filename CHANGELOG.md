@@ -13,3 +13,7 @@ v3 perfect with simple
 1.2.2
 
 config path added
+
+1.3.4
+
+showall from new npm tested
