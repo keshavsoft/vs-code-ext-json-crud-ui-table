@@ -136,6 +136,36 @@
             </div>
 
         </div>
+
+        <!-- use component Only -->
+        <div class="mt-6">
+
+            <div class="text-sm text-gray-400 mb-3">
+                component
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="sendCompShowAll()" class="group bg-[#252526]
+                    border border-gray-700
+                    rounded-xl p-5 text-left
+                    hover:border-blue-500
+                    hover:bg-[#2d2d30]
+                    transition-all">
+                    <div class="text-2xl mb-2">📄</div>
+
+                    <div class="font-medium">
+                        Show All
+                    </div>
+
+                    <div class="text-sm text-gray-400">
+                        Header only with big font 10
+                    </div>
+                </button>
+
+            </div>
+
+        </div>
+
         <!-- Status -->
         <div id="status" class="hidden mt-6 rounded-xl border border-blue-600/30
     bg-blue-500/10 px-4 py-3 text-blue-300">
@@ -157,6 +187,12 @@
         function showAll() {
             vscode.postMessage({
                 action: "showAll",
+                tableName: document.getElementById("tableName").value
+            });
+        };
+        function sendCompShowAll() {
+            vscode.postMessage({
+                action: "compShowAll",
                 tableName: document.getElementById("tableName").value
             });
         };
