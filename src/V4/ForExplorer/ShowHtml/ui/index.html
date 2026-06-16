@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#1e1e1e] text-white min-h-screen p-6">
+
+    <div class="max-w-3xl mx-auto">
+
+        <div class="mb-6">
+            <h1 class="text-2xl font-semibold">
+                JSON CRUD Generator
+            </h1>
+
+            <p class="text-sm text-gray-400 mt-1">
+                Generate tables and preview actions
+            </p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="bg-[#252526] border border-gray-700 rounded-xl p-4 shadow-lg">
+
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+                Table Name
+            </label>
+
+            <div class="flex gap-3">
+
+                <input id="tableName" type="text" placeholder="Customers" class="flex-1 px-4 py-2 rounded-lg bg-[#1e1e1e]
+                    border border-gray-600
+                    focus:border-blue-500
+                    focus:outline-none">
+
+                <button onclick="sendWithHeader()" class="px-5 py-2 rounded-lg
+                    bg-blue-600 hover:bg-blue-500
+                    active:scale-95
+                    transition-all">
+                    Generate
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-6">
+
+            <div class="text-sm text-gray-400 mb-3">
+                Actions
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="showAll()" class="group bg-[#252526]
+                    border border-gray-700
+                    rounded-xl p-5 text-left
+                    hover:border-blue-500
+                    hover:bg-[#2d2d30]
+                    transition-all">
+                    <div class="text-2xl mb-2">📄</div>
+
+                    <div class="font-medium">
+                        Show All
+                    </div>
+
+                    <div class="text-sm text-gray-400">
+                        Generate complete table CRUD
+                    </div>
+                </button>
+
+                <button onclick="send('showAllWithSerial')" class="group bg-[#252526]
+                    border border-gray-700
+                    rounded-xl p-5 text-left
+                    hover:border-blue-500
+                    hover:bg-[#2d2d30]
+                    transition-all">
+                    <div class="text-2xl mb-2">🔢</div>
+
+                    <div class="font-medium">
+                        Show With Serial
+                    </div>
+
+                    <div class="text-sm text-gray-400">
+                        Generate table with serial column
+                    </div>
+                </button>
+
+                <button onclick="send('search')" class="group bg-[#252526]
+    border border-gray-700
+    rounded-xl p-5 text-left
+    hover:border-blue-500
+    hover:bg-[#2d2d30]
+    transition-all">
+                    <div class="text-2xl mb-2">🔍</div>
+
+                    <div class="font-medium">
+                        Search
+                    </div>
+
+                    <div class="text-sm text-gray-400">
+                        Generate search UI
+                    </div>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Header Only -->
+        <div class="mt-6">
+
+            <div class="text-sm text-gray-400 mb-3">
+                Header only
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="sendHeaderOnly()" class="group bg-[#252526]
+                    border border-gray-700
+                    rounded-xl p-5 text-left
+                    hover:border-blue-500
+                    hover:bg-[#2d2d30]
+                    transition-all">
+                    <div class="text-2xl mb-2">📄</div>
+
+                    <div class="font-medium">
+                        Header 10
+                    </div>
+
+                    <div class="text-sm text-gray-400">
+                        Header only with big font 10
+                    </div>
+                </button>
+
+            </div>
+
+        </div>
+        <!-- Status -->
+        <div id="status" class="hidden mt-6 rounded-xl border border-blue-600/30
+    bg-blue-500/10 px-4 py-3 text-blue-300">
+        </div>
+
+        <!-- Summary -->
+        <div id="summary" class="hidden mt-4 rounded-xl border border-gray-700
+    bg-[#252526] p-4">
+        </div>
+    </div>
+
+    <script>
+        const vscode = acquireVsCodeApi();
+
+        function send(action) {
+            vscode.postMessage({ action });
+        }
+
+        function showAll() {
+            vscode.postMessage({
+                action: "showAll",
+                tableName: document.getElementById("tableName").value
+            });
+        };
+
+        function sendHeaderOnly() {
+            vscode.postMessage({
+                action: "headerOnly",
+                tableName: document.getElementById("tableName").value
+            });
+        };
+
+        window.addEventListener("message", ({ data }) => {
+
+            if (data.type === "status") {
+                document.getElementById("status")
+                    .classList.remove("hidden");
+
+                document.getElementById("status")
+                    .innerHTML = data.text;
+            }
+
+            if (data.type === "summary") {
+                document.getElementById("summary")
+                    .classList.remove("hidden");
+
+                document.getElementById("summary")
+                    .innerHTML = data.html;
+            };
+
+            if (data.type === "complete") {
+                document.getElementById("status")
+                    .classList.add("hidden");
+
+                const summary =
+                    document.getElementById("summary");
+
+                summary.classList.remove("hidden");
+                summary.innerHTML = data.html;
+            }
+        });
+    </script>
+
+</body>
+
+</html>
