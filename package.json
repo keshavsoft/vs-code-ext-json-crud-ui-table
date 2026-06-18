@@ -4,7 +4,7 @@
   "description": "Generate Ui for different tables",
   "publisher": "KeshavSoft",
   "type": "module",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -20,14 +20,14 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.showHtml",
-        "title": "showHtml"
+        "command": "extension.ks.ui.showHtml",
+        "title": "Build UI"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "extension.showHtml",
+          "command": "extension.ks.ui.showHtml",
           "when": "explorerResourceIsFolder",
           "group": "navigation@2"
         }
@@ -52,6 +52,6 @@
   "dependencies": {
     "json-crud-ui-table": "^1.12.4",
     "json-crud-ui-comp": "^1.1.3",
-    "json-crud-ui-comp-table": "^1.4.2"
+    "json-crud-ui-comp-table": "^1.5.5"
   }
 }

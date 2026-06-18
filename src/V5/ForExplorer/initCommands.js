@@ -18,7 +18,7 @@ const withHeaderFunc = (context) => {
 };
 
 const showHtmlFunc = (context) => {
-    const commandToRegister = "extension.showHtml";
+    const commandToRegister = "extension.ks.ui.showHtml";
 
     const showAll = vscode.commands.registerCommand(commandToRegister, (uri) => readHtml(context, uri));
 
