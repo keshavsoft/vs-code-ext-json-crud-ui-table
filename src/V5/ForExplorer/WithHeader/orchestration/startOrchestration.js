@@ -1,0 +1,34 @@
+import * as vscode from 'vscode';
+
+import { resolveContext } from '../utils/context.js';
+import { finalize } from '../utils/response.js';
+import { runPrechecks } from '../services/precheck.js';
+import { runFeatureOrchestration } from './runFeatureOrchestration.js';
+import { openRoutesFile } from '../services/openFile.js';
+
+export async function startOrchestration({ uri }) {
+    try {
+        const context = resolveContext(uri);
+
+        runPrechecks({
+            targetPath: context.targetPath,
+            appJsPath: context.appJsPath
+        });
+
+        const userRootFolder =
+            vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+
+        const result = await runFeatureOrchestration({
+            userRootFolder,
+            context
+        });
+
+        if (!result) return;
+
+        openRoutesFile(`${context.targetPath}/${result.endpoint}`);
+
+        finalize({
+            message: `Endpoint '${result.endpoint}' created 🚀`
+        });
+    } catch (e) { console.log('ERROR'); throw e; }
+};
