@@ -7,6 +7,34 @@ import { withHeader, headerOnly } from "json-crud-ui-table";
 import { tableComp } from "json-crud-ui-comp";
 import { showAll } from "json-crud-ui-comp-table";
 
+const getSchemaFiles = (schemasPath) => {
+    if (schemasPath === undefined || fs.existsSync(schemasPath) === false) {
+        return [];
+    };
+
+    return fs.readdirSync(schemasPath, { withFileTypes: true })
+        .filter((item) => item.isFile() && item.name.endsWith(".json"))
+        .sort((first, second) => first.name.localeCompare(second.name))
+        .map((item) => {
+            const filePath = path.join(schemasPath, item.name);
+            const fallbackTableName = path.basename(item.name, ".json");
+
+            try {
+                const schema = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+                return {
+                    name: item.name,
+                    tableName: schema.tableName || fallbackTableName
+                };
+            } catch {
+                return {
+                    name: item.name,
+                    tableName: fallbackTableName
+                };
+            };
+        });
+};
+
 const activateHtml = (context, uri) => {
     const panel = vscode.window.createWebviewPanel(
         "showHtml",
@@ -22,8 +50,18 @@ const activateHtml = (context, uri) => {
     panel.webview.onDidReceiveMessage(async (message) => {
         const userRootFolder =
             vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+        const schemasPath = userRootFolder === undefined
+            ? undefined
+            : path.join(userRootFolder, "Config", "Schemas");
 
         switch (message.action) {
+            case "loadSchemas":
+                panel.webview.postMessage({
+                    type: "schemas",
+                    schemas: getSchemaFiles(schemasPath)
+                });
+                break;
+
             case "showAll":
 
                 panel.webview.postMessage({
@@ -36,7 +74,7 @@ const activateHtml = (context, uri) => {
                     isAnnounce: true,
                     toPath: uri.fsPath,
                     tableName: message.tableName,
-                    configPath: path.join(userRootFolder, "Config", "Schemas")
+                    configPath: schemasPath
                 });
 
                 panel.webview.postMessage({
@@ -66,7 +104,7 @@ const activateHtml = (context, uri) => {
                     isAnnounce: true,
                     toPath: uri.fsPath,
                     tableName: message.tableName,
-                    configPath: path.join(userRootFolder, "Config", "Schemas")
+                    configPath: schemasPath
                 });
 
                 panel.webview.postMessage({
@@ -124,7 +162,7 @@ const activateHtml = (context, uri) => {
                     isAnnounce: true,
                     toPath: uri.fsPath,
                     tableName: message.tableName,
-                    configPath: path.join(userRootFolder, "Config", "Schemas")
+                    configPath: schemasPath
                 });
 
                 panel.webview.postMessage({

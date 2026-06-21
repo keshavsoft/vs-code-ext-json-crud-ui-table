@@ -52,6 +52,6 @@
   "dependencies": {
     "json-crud-ui-table": "^1.12.4",
     "json-crud-ui-comp": "^1.1.3",
-    "json-crud-ui-comp-table": "^1.5.5"
+    "json-crud-ui-comp-table": "^1.6.6"
   }
 }
