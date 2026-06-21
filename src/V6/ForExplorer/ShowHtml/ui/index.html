@@ -216,13 +216,7 @@
                 tableName: getTableName()
             });
         };
-        function sendCompShowAll() {
-            vscode.postMessage({
-                action: "compShowAll",
-                tableName: getTableName()
-            });
-        };
-
+        
         function sendHeaderOnly() {
             vscode.postMessage({
                 action: "headerOnly",
@@ -262,6 +256,13 @@
 
             schemaFileSelect.value = schemaFiles[0].name;
             selectSchema();
+        };
+
+        function sendCompShowAll() {
+            vscode.postMessage({
+                action: "compShowAll",
+                tableName: getTableName()
+            });
         };
 
         window.addEventListener("message", ({ data }) => {
