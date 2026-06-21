@@ -1,10 +1,10 @@
 {
   "name": "vs-code-ext-json-crud-ui-table",
   "displayName": "Crud Ui Table Init",
-  "description": "Generate Ui for different tables",
+  "description": "Generate Ui for different tables using js libraries",
   "publisher": "KeshavSoft",
   "type": "module",
-  "version": "1.5.2",
+  "version": "1.6.1",
   "engines": {
     "vscode": "^1.116.0"
   },
