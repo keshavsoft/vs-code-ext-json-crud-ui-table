@@ -4,7 +4,7 @@
   "description": "Generate Ui for different tables using js libraries",
   "publisher": "KeshavSoft",
   "type": "module",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "engines": {
     "vscode": "^1.116.0"
   },
@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "json-crud-ui-table": "^1.12.4",
-    "json-crud-ui-comp": "^1.1.3",
+    "json-crud-ui-comp": "^1.2.2",
     "json-crud-ui-comp-table": "^1.6.7"
   }
 }

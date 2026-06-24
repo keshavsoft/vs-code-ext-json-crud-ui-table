@@ -4,7 +4,7 @@ import path from 'path';
 
 import { withHeader, headerOnly } from "json-crud-ui-table";
 
-import { tableComp } from "json-crud-ui-comp";
+import { tableComp, fromComponents } from "json-crud-ui-comp";
 import { showAll } from "json-crud-ui-comp-table";
 
 const getSchemaFiles = (schemasPath) => {
@@ -158,6 +158,38 @@ const activateHtml = (context, uri) => {
                 });
 
                 await showAll({
+                    showLog: true,
+                    isAnnounce: true,
+                    toPath: uri.fsPath,
+                    tableName: message.tableName,
+                    configPath: schemasPath
+                });
+
+                panel.webview.postMessage({
+                    type: "complete",
+                    html: `
+        <div class="font-semibold mb-2">
+            ✅ Generation Complete
+        </div>
+
+        <div><b>Action:</b> With Header</div>
+        <div><b>Table:</b> ${message.tableName}</div>
+        <div><b>Output:</b> ${uri.fsPath}</div>
+    `
+                });
+
+                break;
+
+
+
+            case "compSimple":
+
+                panel.webview.postMessage({
+                    type: "status",
+                    text: "⏳ Generating CRUD..."
+                });
+
+                await fromComponents({
                     showLog: true,
                     isAnnounce: true,
                     toPath: uri.fsPath,

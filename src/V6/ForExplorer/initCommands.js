@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 
-import showAllCommand from './ShowAll/start.js';
 import withHeaderCommand from './WithHeader/start.js';
 import readHtml from './ShowHtml/readHtml.js';
 
