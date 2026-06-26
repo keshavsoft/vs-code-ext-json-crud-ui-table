@@ -1,39 +1,13 @@
 import * as vscode from 'vscode';
-import fs from 'fs';
 import path from 'path';
 
 import { withHeader, headerOnly } from "json-crud-ui-table";
-
 import { tableComp, fromComponents } from "json-crud-ui-comp";
 import { showAll } from "json-crud-ui-comp-table";
 
-const getSchemaFiles = (schemasPath) => {
-    if (schemasPath === undefined || fs.existsSync(schemasPath) === false) {
-        return [];
-    };
-
-    return fs.readdirSync(schemasPath, { withFileTypes: true })
-        .filter((item) => item.isFile() && item.name.endsWith(".json"))
-        .sort((first, second) => first.name.localeCompare(second.name))
-        .map((item) => {
-            const filePath = path.join(schemasPath, item.name);
-            const fallbackTableName = path.basename(item.name, ".json");
-
-            try {
-                const schema = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
-                return {
-                    name: item.name,
-                    tableName: schema.tableName || fallbackTableName
-                };
-            } catch {
-                return {
-                    name: item.name,
-                    tableName: fallbackTableName
-                };
-            };
-        });
-};
+import { getSchemaFiles } from "./services/schemaService.js";
+import { executeGenerationTask } from "./services/generatorService.js";
+import { getHtmlWithScripts } from "./utils/htmlLoader.js";
 
 const activateHtml = (context, uri) => {
     const panel = vscode.window.createWebviewPanel(
@@ -43,17 +17,11 @@ const activateHtml = (context, uri) => {
         { enableScripts: true }
     );
 
-    panel.webview.html = fs.readFileSync(
-        path.join(import.meta.dirname, "ui", "index.html"),
-        "utf8"
-    );
+    panel.webview.html = getHtmlWithScripts();
     
     panel.webview.onDidReceiveMessage(async (message) => {
-        const userRootFolder =
-            vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-        const schemasPath = userRootFolder === undefined
-            ? undefined
-            : path.join(userRootFolder, "Config", "Schemas");
+        const userRootFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+        const schemasPath = userRootFolder ? path.join(userRootFolder, "Config", "Schemas") : undefined;
 
         switch (message.action) {
             case "loadSchemas":
@@ -64,156 +32,60 @@ const activateHtml = (context, uri) => {
                 break;
 
             case "showAll":
-
-                panel.webview.postMessage({
-                    type: "status",
-                    text: "⏳ Generating CRUD..."
-                });
-
-                await tableComp({
-                    showLog: true,
-                    isAnnounce: true,
-                    toPath: uri.fsPath,
+                await executeGenerationTask({
+                    panel,
+                    actionLabel: "Show All (Complete CRUD)",
                     tableName: message.tableName,
-                    configPath: schemasPath
+                    toPath: uri.fsPath,
+                    configPath: schemasPath,
+                    generateFunc: tableComp
                 });
-
-                panel.webview.postMessage({
-                    type: "complete",
-                    html: `
-        <div class="font-semibold mb-2">
-            ✅ Generation Complete
-        </div>
-
-        <div><b>Action:</b> With Header</div>
-        <div><b>Table:</b> ${message.tableName}</div>
-        <div><b>Output:</b> ${uri.fsPath}</div>
-    `
-                });
-
                 break;
 
             case "withHeader":
-
-                panel.webview.postMessage({
-                    type: "status",
-                    text: "⏳ Generating CRUD..."
-                });
-
-                await withHeader({
-                    showLog: true,
-                    isAnnounce: true,
-                    toPath: uri.fsPath,
+                await executeGenerationTask({
+                    panel,
+                    actionLabel: "With Header",
                     tableName: message.tableName,
-                    configPath: schemasPath
+                    toPath: uri.fsPath,
+                    configPath: schemasPath,
+                    generateFunc: withHeader
                 });
-
-                panel.webview.postMessage({
-                    type: "complete",
-                    html: `
-        <div class="font-semibold mb-2">
-            ✅ Generation Complete
-        </div>
-
-        <div><b>Action:</b> With Header</div>
-        <div><b>Table:</b> ${message.tableName}</div>
-        <div><b>Output:</b> ${uri.fsPath}</div>
-    `
-                });
-
                 break;
 
             case "headerOnly":
-
-                panel.webview.postMessage({
-                    type: "status",
-                    text: "⏳ Generating CRUD..."
+                await executeGenerationTask({
+                    panel,
+                    actionLabel: "Header Only",
+                    tableName: message.tableName,
+                    toPath: uri.fsPath,
+                    configPath: schemasPath,
+                    generateFunc: headerOnly
                 });
-
-                await headerOnly({
-                    showLog: true,
-                    isAnnounce: true,
-                    toPath: uri.fsPath
-                });
-
-                panel.webview.postMessage({
-                    type: "complete",
-                    html: `
-        <div class="font-semibold mb-2">
-            ✅ Generation Complete
-        </div>
-
-        <div><b>Action:</b> With Header</div>
-        <div><b>Table:</b> ${message.tableName}</div>
-        <div><b>Output:</b> ${uri.fsPath}</div>
-    `
-                });
-
                 break;
 
             case "compShowAll":
-
-                panel.webview.postMessage({
-                    type: "status",
-                    text: "⏳ Generating CRUD..."
-                });
-
-                await showAll({
-                    showLog: true,
-                    isAnnounce: true,
-                    toPath: uri.fsPath,
+                await executeGenerationTask({
+                    panel,
+                    actionLabel: "Show All Components",
                     tableName: message.tableName,
-                    configPath: schemasPath
+                    toPath: uri.fsPath,
+                    configPath: schemasPath,
+                    generateFunc: showAll
                 });
-
-                panel.webview.postMessage({
-                    type: "complete",
-                    html: `
-        <div class="font-semibold mb-2">
-            ✅ Generation Complete
-        </div>
-
-        <div><b>Action:</b> With Header</div>
-        <div><b>Table:</b> ${message.tableName}</div>
-        <div><b>Output:</b> ${uri.fsPath}</div>
-    `
-                });
-
                 break;
-
-
 
             case "compSimple":
-
-                panel.webview.postMessage({
-                    type: "status",
-                    text: "⏳ Generating CRUD..."
-                });
-
-                await fromComponents({
-                    showLog: true,
-                    isAnnounce: true,
-                    toPath: uri.fsPath,
+                await executeGenerationTask({
+                    panel,
+                    actionLabel: "Simple Show All Component",
                     tableName: message.tableName,
-                    configPath: schemasPath
+                    toPath: uri.fsPath,
+                    configPath: schemasPath,
+                    generateFunc: fromComponents
                 });
-
-                panel.webview.postMessage({
-                    type: "complete",
-                    html: `
-        <div class="font-semibold mb-2">
-            ✅ Generation Complete
-        </div>
-
-        <div><b>Action:</b> With Header</div>
-        <div><b>Table:</b> ${message.tableName}</div>
-        <div><b>Output:</b> ${uri.fsPath}</div>
-    `
-                });
-
                 break;
-
-        };
+        }
     });
 };
 
