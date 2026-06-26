@@ -47,6 +47,7 @@ const activateHtml = (context, uri) => {
         path.join(import.meta.dirname, "ui", "index.html"),
         "utf8"
     );
+    
     panel.webview.onDidReceiveMessage(async (message) => {
         const userRootFolder =
             vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
