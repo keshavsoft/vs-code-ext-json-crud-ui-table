@@ -1,19 +1,9 @@
 import * as vscode from 'vscode';
 
-import withHeaderCommand from './WithHeader/start.js';
 import readHtml from './ShowHtml/readHtml.js';
 
 const registerAllCommands = (context) => {
-    withHeaderFunc(context);
     showHtmlFunc(context);
-};
-
-const withHeaderFunc = (context) => {
-    const commandToRegister = "extension.explorer.context.folder.ui.table.init.withHeader";
-
-    const showAll = vscode.commands.registerCommand(commandToRegister, () => withHeaderCommand(context));
-
-    context.subscriptions.push(showAll);
 };
 
 const showHtmlFunc = (context) => {
