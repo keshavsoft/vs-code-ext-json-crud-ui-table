@@ -17,7 +17,12 @@ function getLatestVersionFolder() {
 export async function activate(context) {
 	const latest = getLatestVersionFolder();
 
-	const mod = await import(`./src/${latest}/registerCommands.js`);
+	const backendPath = path.join(__dirname, "src", latest, "backend", "registerCommands.js");
+	const importPath = fs.existsSync(backendPath)
+		? `./src/${latest}/backend/registerCommands.js`
+		: `./src/${latest}/registerCommands.js`;
+
+	const mod = await import(importPath);
 
 	mod.registerAllCommands(context);
 };

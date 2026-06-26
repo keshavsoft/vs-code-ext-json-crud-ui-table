@@ -4,7 +4,8 @@ export default [
     {
         ignores: [
             "**/archive/**",
-            "**/ui/js/**"
+            "**/ui/js/**",
+            "**/frontend/js/**"
         ]
     },
     {

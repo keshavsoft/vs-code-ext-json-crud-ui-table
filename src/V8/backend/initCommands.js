@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import readHtml from './ShowHtml/readHtml.js';
+import readHtml from './readHtml.js';
 
 const registerAllCommands = (context) => {
     showHtmlFunc(context);

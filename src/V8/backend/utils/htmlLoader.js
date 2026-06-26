@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 export function getHtmlWithScripts() {
-    const uiDir = path.join(import.meta.dirname, "..", "ui");
-    let html = fs.readFileSync(path.join(uiDir, "index.html"), "utf8");
+    const frontendDir = path.join(import.meta.dirname, "..", "..", "frontend");
+    let html = fs.readFileSync(path.join(frontendDir, "index.html"), "utf8");
 
     const jsFiles = [
         "vscodeApi.js",
@@ -14,7 +14,7 @@ export function getHtmlWithScripts() {
     ];
 
     const scriptTags = jsFiles.map(file => {
-        const content = fs.readFileSync(path.join(uiDir, "js", file), "utf8");
+        const content = fs.readFileSync(path.join(frontendDir, "js", file), "utf8");
         return `<script>\n${content}\n</script>`;
     }).join("\n");
 
