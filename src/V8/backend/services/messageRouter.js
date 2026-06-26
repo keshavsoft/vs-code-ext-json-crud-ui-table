@@ -4,6 +4,7 @@ import { generateWithHeader } from "./actions/withHeader.js";
 import { generateHeaderOnly } from "./actions/headerOnly.js";
 import { generateCompShowAll } from "./actions/compShowAll.js";
 import { generateCompSimple } from "./actions/compSimple.js";
+import quotation from "./actions/quotation.js";
 
 export async function handleWebviewMessage({ message, panel, toPath, schemasPath }) {
     switch (message.action) {
@@ -54,6 +55,16 @@ export async function handleWebviewMessage({ message, panel, toPath, schemasPath
                 toPath,
                 schemasPath
             });
+            break;
+
+        case "quotation":
+            await quotation({
+                panel,
+                tableName: message.tableName,
+                toPath,
+                schemasPath
+            });
+
             break;
     }
 }

@@ -20,7 +20,11 @@ function sendCompShowAll() {
 
 function sendCompSimple() {
     sendAction("compSimple", { tableName: getTableName() });
-}
+};
+
+function quotation() {
+    sendAction("quotation", { tableName: getTableName() });
+};
 
 function send(action) {
     sendAction(action);
